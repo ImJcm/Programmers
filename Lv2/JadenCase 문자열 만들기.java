@@ -15,6 +15,25 @@ s	                    return
 "3people unFollowed me"	"3people Unfollowed Me"
 "for the last week"	"For The Last Week"
  */
+/*
+해당 코드는 몇몇개의 테스트코드만 성공하고 나머지 테스트코드는 실패 또는 런타임 에러가 발생
+따라서, 코드자체를 변경할 필요가 있음을 판단했다.
+
+문자 하나하나를 기준으로 공백문자일 경우, 다음 문자를 대문자로 바꿔서 문자열을 완성하는 형식으로 코드 구현
+ */
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+
+        boolean chk = true; //공백문자 + 다음문자열 대문자만들 수 있는 조건
+        for(String str : s.toLowerCase().split("")) {
+            answer += (chk ? str.toUpperCase() : str);
+            chk = (str.equals(" ") ? true : false);
+        }
+        return answer;
+    }
+}
+/*
 public class Solution {
     public String solution(String s) {
         String answer = "";
@@ -40,3 +59,4 @@ public class Solution {
         return answer.substring(0,answer.length() - 1);
     }
 }
+*/
