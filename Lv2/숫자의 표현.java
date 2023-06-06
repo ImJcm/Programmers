@@ -19,7 +19,9 @@ n	result
 문제의 예시와 같습니다.
  */
 /*
-
+    자연수 n이므로, 1~n 까지의 연속된 합 조합을 구하기 위해서 i:1~n 까지 반복문_1
+    i부터 시작하는 연속된 합 조합을 만들기 위해 j:i~n 반복문_2
+    합이 n과 같으면 결과 갯수 카운트 + 1, 합이 넘어가면 j 반복문 탈출하고 다음 i 진행한다.
  */
 class Solution {
     public static void main(String[] args) {
