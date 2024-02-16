@@ -31,7 +31,43 @@ want	number	discount	result
 사과가 할인하는 날이 없으므로 0을 return 합니다.
  */
 class Solution {
-    public static int solution(String[] want, int[] number, String[] discount) {
+    static int solution_2Point(String[] want, int[] number, String[] discount) {
+        int answer = 0;
+        int total = 0;
+        Map<String, Integer> wansts = new LinkedHashMap<>();
+
+        for(int i=0;i<number.length;i++) {
+            total += number[i];
+            wansts.put(want[i],number[i]);
+        }
+
+        int choice = 0;
+        for(int i=0;i<=discount.length - total;i++) {
+            while(choice < total && i + choice < discount.length) {
+                if(wansts.containsKey(discount[i+choice]) && wansts.get(discount[i+choice]) > 0) {
+                    wansts.replace(discount[i+choice],wansts.get(discount[i+choice]) - 1);
+                    choice++;
+                } else {
+                    break;
+                }
+            }
+
+            if(choice == total) {
+                answer += 1;
+            }
+
+            if(choice > 0) {
+                wansts.replace(discount[i],wansts.get(discount[i]) + 1);
+                choice--;
+            } else {
+                choice = 0;
+            }
+
+        }
+
+        return answer;
+    }
+    public static int solution_simpleLogic(String[] want, int[] number, String[] discount) {
         int answer = 0;
         int total = 0;
         Map<String, Integer> wansts = new LinkedHashMap<>();
