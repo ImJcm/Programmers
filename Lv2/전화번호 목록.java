@@ -36,17 +36,84 @@ phone_book	return
 2021년 3월 4일, 테스트 케이스가 변경되었습니다. 이로 인해 이전에 통과하던 코드가 더 이상 통과하지 않을 수 있습니다.
  */
 /*
-
+접두사에 대한 이해가 부족하여 정답 코드를 참고하였다.
+1. 접두사 = 문장의 앞부분을 의미
+2. Arrays.sort()하는 이유 : String의 정렬 기준은 앞부분부터 유사한 문자열이 나열되도록 정렬하여 효율적인 접두사 체크가 가능하기 위해서이다.
+3. 각 전화번호를 선택하여 전화번호의 앞부분부터 접두사를 조합하여 해당하는 접두사가 sets에 존재하는지 검사한다.
+예시#1 ["119", "97674223", "1195524421"]에서 119는 1, 11 까지만 sets에서 포함여부를 체크하고, 1195524421에서 1,11,119,....
+    119에서 접두사로 체크된다.
  */
 class Solution {
+    static HashSet<String> sets;
     static boolean solution(String[] phone_book) {
         boolean answer = true;
+
+        init_setting(phone_book);
+
+        for(String phone_number : phone_book) {
+            for(int i=0;i<phone_number.length();i++) {
+                if(sets.contains(phone_number.substring(0,i))) {
+                    answer = false;
+                    break;
+                }
+            }
+        }
+
         return answer;
     }
 
-    public static void main(String[] args) {
-        String[] phone_book = {};
+    static void init_setting(String[] phone_book) {
+        Arrays.sort(phone_book);
 
-        System.out.println(solution(phone_book));
+        sets = new LinkedHashSet<>(Arrays.asList(phone_book));
+    }
+
+    public static void main(String[] args) {
+        String[] phone_book_ex1 = {"119", "97674223", "1195524421"};
+        String[] phone_book_ex2 = {"123","456","789"};
+        String[] phone_book_ex3 = {"12","123","1235","567","88"};
+
+        System.out.println(solution(phone_book_ex1));
+        //System.out.println(solution(phone_book_ex2));
+    }
+}
+
+/*
+전화번호부에 존재하는 전화번호를 하나의 String으로 만들어 접두어를 고려하지 않는 포함여부를 체크하는 코드 + 효율성 실패
+ */
+class Solution_singleSentence_WrongAnswer {
+    static String combine_phone_numbers;
+    static boolean solution(String[] phone_book) {
+        boolean answer = true;
+
+        init_setting(phone_book);
+
+        // 접두어가 아닌 포함여부를 체크하여 실패
+        for(String phone_number : phone_book) {
+            int idx = combine_phone_numbers.indexOf(phone_number);
+            if(combine_phone_numbers.indexOf(phone_number,idx + 1) > 0) {
+                answer = false;
+                break;
+            }
+        }
+
+        return answer;
+    }
+
+    static void init_setting(String[] phone_book) {
+        Arrays.asList(phone_book).stream().sorted();
+        combine_phone_numbers = "";
+
+        for(String phone_number : phone_book) {
+            combine_phone_numbers += (phone_number + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        String[] phone_book_ex1 = {"119", "97674223", "1195524421"};
+        String[] phone_book_ex2 = {"123","456","789"};
+        String[] phone_book_ex3 = {"12","123","1235","567","88"};
+
+        System.out.println(solution(phone_book_ex1));
     }
 }
