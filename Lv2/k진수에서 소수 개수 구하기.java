@@ -28,17 +28,80 @@ n	k	result
 110011	10	2
  */
 /*
-에라토스테네스의 체를 이용하여 소수를 판별할 배열을 생성하는 과정에서 배열의 최대 길이가 1,000,000 -> 3bit -> 1212210202001이므로 int[1212210202001]로 생성되어야 하는데
-이는 배열의 허용 범위를 넘어가므로 에라스토테네스의 체를 이용한
+0으로 구분한 숫자인 문자열 중 가장 큰 값까지 소수를 에라스토테네스의 체로 배열을 만드는데 배열의 크기가 커서 테스트 코드 #1, #11에서
+런타임 에러가 발생한다. 따라서 에라스토테네스의 체로 소수판별을 하는 방법이 아닌 다른 방법을 이용해야 한다.
+
+
  */
 class Solution {
     static int[] sieve;
+
     public static int solution(int n, int k) {
         int count = 0;
 
-        eratos(n,k);
+        String[] parr = Long.toString(n,k).split("0");
+
+        for(String p : parr) {
+            if(p.isEmpty() || p.isBlank()) continue;
+
+            if(isPrime(Long.parseLong(p))) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    //Test case #1, #11 - 실패
+    public static int solution_fail(int n, int k) {
+        int count = 0;
+
+        //int 범위를 넘어서는 값이 들어올 수 있다. 최대 1,000,000 -> 3bit -> 1212210202001
+        String[] parr = Integer.toString(n,k).split("0");
+
+        for(String p : parr) {
+            if(p.isEmpty() || p.isBlank()) continue;
+
+            if(isPrime(Integer.parseInt(p))) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    static boolean isPrime(int n) {
+        if(n == 1) return false;
+        if(n == 2) return true;
+
+        for(int i=2;i<=Math.sqrt(n);i++) {
+            if(n % i == 0) return false;
+        }
+        return true;
+    }
+
+    static boolean isPrime(long n) {
+        if(n == 1) return false;
+        if(n == 2) return true;
+
+        for(long i=2;i<=Math.sqrt(n);i++) {
+            if(n % i == 0) return false;
+        }
+        return true;
+    }
+
+    public static int solution_eratos(int n, int k) {
+        int count = 0, max_range = 0;
 
         String[] parr = Integer.toString(n,k).split("0");
+
+        for(String p : parr) {
+            if(p.isEmpty() || p.isBlank()) continue;
+            int r = Integer.parseInt(p);
+            max_range = Math.max(r, max_range);
+        }
+
+        eratos(max_range);
 
         for(String p : parr) {
             if(p.isEmpty() || p.isBlank()) continue;
@@ -51,20 +114,17 @@ class Solution {
         return count;
     }
 
-    static void eratos(int n, int k) {
-        //1000000 -> 3bit -> 1212210202001
-        //int max_range = Integer.parseInt(Integer.toString(n,k));
-        int max_range = Integer.MAX_VALUE - 8;
-        sieve = new int[max_range];
+    static void eratos(int range) {
+        sieve = new int[range + 1];
 
         Arrays.fill(sieve,0);
 
         sieve[1] = 1;
 
-        for(int i=2;i<max_range;i++) {
+        for(int i=2;i<=range;i++) {
             if(sieve[i] != 0) continue;
 
-            for(int j=2*i;j<max_range;j += i) {
+            for(int j=2*i;j<=range;j += i) {
                 sieve[j] = 1;
             }
         }
@@ -75,6 +135,7 @@ class Solution {
         //int n = 883438;
         int n = 1000000;
         int k = 3;
+        System.out.println(Integer.toString(n,k));
         System.out.println(solution(n,k));
     }
 }
