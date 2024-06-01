@@ -68,6 +68,7 @@ ABABABABABABABAB	[1, 2, 27, 29, 28, 31, 30]
 이 문제의 알고리즘을 코드로 구현하는데 어려움은 없지만 마지막 문자열에 도달하는 순간의 조건에 맞는 로직을 구현하는 것이 중요하다.
 가장 긴 문자열인 w 또는 w+c가 마지막 문자가 포함되는 경우 해당 문자열이 사전에 존재할 경우 다음 문자를 포함하여 사전을 검색하기 때문에
 ArrayIndexOutOfBound 예외가 발생할 수 있으므로, 마지막 문자에 도달한 경우 branch(분기)를 달리하여 실행할 코드를 분리하도록 하였다.
+
  */
 class Solution {
     static Map<String, Integer> dictionary;
